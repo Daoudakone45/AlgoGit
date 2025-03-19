@@ -1,0 +1,178 @@
+# Exercice 1 
+
+Question 1 et 2:
+
+// Intialisation des variables
+    event_queue = create_pq();
+    customer_queue = create_q();
+    
+    for(int i = 0; i < N_VENDORS ; i++){
+        vendor[i] = NULL ;
+    }
+    
+    // Creation du client 
+    customer * customerTest = create_customer(42);
+
+    enqueue_q( customer_queue, customerTest);
+
+    customer* test = dequeue_q(customer_queue);
+
+    printf("%d \n", test->atime);
+
+    free_customer(c_extracted);
+    free_q(customer_queue);
+    free_pq(event_queue);
+
+
+
+#Exercice 2
+
+Question 1 et 2
+
+void event_loop(){
+    while(size_pq(event_queue) > 0) {
+        event* e = remove_min_pq(event_queue);
+        printf("L'heure de l'événement avant son traitement : %d\n", e->etime);
+        printf("Le type d'événement : %c\n", e->type); // Vérifier si c'est une arrivée ou un départ
+
+        if(e->type == EVENT_ARRIVAL)
+            process_arrival(e);
+        else if(e->type == EVENT_DEPARTURE)
+            process_departure(e);
+
+        free_event(e);
+    }
+}
+
+
+Question 3:
+
+int main() {
+    // intialisation
+    event_queue = create_pq();
+    customer_queue = create_q();
+    for (int i = 0; i < N_VENDORS; i++) {
+        vendor[i] = NULL;
+    }
+
+    // Création d'un client avec une heure d'arrivée de 42 secondes
+    customer *c = create_customer(42);
+    event *arrival_event = create_arrival(42, c);
+    insert_pq(event_queue, arrival_event); // Ajouter l'événement à la file de priorité
+
+    // Lancer la boucle d'événements
+    event_loop();
+
+    // Libération de la mémoire
+    free_q(customer_queue);
+    free_pq(event_queue);
+    
+
+    return 0;
+}
+
+
+Exercice 3
+
+Question 1:
+
+declcaration; int current_time = 0;
+
+Dans la boucle de l'evenement: current_time = e->etime;
+
+Question 2:
+
+
+Question 4:
+kddaouda@Daouda:~/Esiee/Algo/tp5$ ./bakery
+60 | X__ |
+120 | XX_ |
+180 | XXX |
+210 | _XX |
+240 | XXX |
+270 | X_X |
+300 | XXX |
+330 | XX_ |
+330 | XX_ |
+kddaouda@Daouda:~/Esiee/Algo/tp5$
+
+
+
+
+
+
+
+Exercice 6 
+
+Question 6
+
+Complexité des fonctions :
+
+1. **enqueue_q(queue *q, customer *c)** : O(1)
+   - L'ajout se fait en fin de liste, avec un accès direct via `q->last`, donc il ne dépend pas de la taille de la file.
+
+2. **dequeue_q(queue *q)** : O(1)
+   - L'extraction se fait en début de liste, avec un accès direct via `q->first`, donc elle ne dépend pas de la taille de la file.
+
+**Vérification des complexités :**
+- Pour `enqueue_q` : Insérer un grand nombre de clients et mesurer le temps d'exécution. Si le temps reste proportionnel au nombre d'insertions, c'est bien O(1).
+- Pour `dequeue_q` : Extraire un grand nombre de clients et mesurer le temps. Si le temps d'exécution reste constant par suppression, c'est bien O(1).
+
+Une autre façon est d'utiliser un profiler ou des compteurs d'opérations pour observer la stabilité du temps d'exécution.
+
+
+
+
+
+
+
+Exercice 7 
+
+Question 7
+
+Complexité des fonctions :
+
+1. **insert_pq(prioqueue *q, event *e)** : O(n)
+   - L'insertion parcourt la liste pour trouver la bonne position, ce qui prend un temps proportionnel au nombre d'éléments.
+
+2. **remove_min_pq(prioqueue *q)** : O(1)
+   - L'extraction de l'élément en tête de liste se fait en accès direct, donc en temps constant.
+
+**Vérification des complexités :**
+- Pour `insert_pq` : Ajouter un grand nombre d'événements et mesurer le temps d'exécution. Si le temps d'exécution augmente linéairement avec le nombre d'éléments, c'est bien O(n).
+- Pour `remove_min_pq` : Extraire un grand nombre d'événements et mesurer le temps. Si le temps reste constant quelle que soit la taille de la file, c'est bien O(1).
+
+Une autre méthode est d'utiliser un profiler ou d'afficher le nombre d'opérations effectuées pendant les insertions et suppressions.
+
+
+
+Exercice 8
+
+Question 2
+
+Résultats des tests
+
+1. Nombre de vendeurs
+
+Quand il y a peu de vendeurs, le temps d'attente des clients augmente et la file devient longue. En augmentant le nombre de vendeurs, le service est plus rapide et la file diminue. Cependant, s'il y a trop de vendeurs par rapport au nombre de clients, certains restent inoccupés.
+
+2. Taux d'arrivée des clients
+
+Si les clients arrivent trop vite, la file d'attente s'allonge et les vendeurs ont du mal à suivre. À l'inverse, si le taux d'arrivée est faible, les vendeurs risquent de ne pas être toujours occupés, ce qui ralentit l'activité de la boulangerie.
+
+3. Temps de service
+
+Un service rapide permet de réduire le temps d'attente, mais s'il est trop court, les vendeurs peuvent être sous-utilisés. Si le service est trop long, la file s'accumule et les clients attendent plus longtemps avant d'être servis.
+
+Conclusion
+
+Pour éviter une file d'attente trop longue et assurer un bon service, il faut trouver un équilibre entre le nombre de vendeurs, la vitesse d'arrivée des clients et le temps de service. Une bonne règle à suivre est que le nombre de vendeurs doit être proportionnel au nombre de clients et à leur temps de service.
+
+Recommandations
+
+Ajouter des vendeurs si la file d'attente devient trop grande.
+
+Réduire le taux d'arrivée si les vendeurs sont débordés.
+
+Ajuster le temps de service pour éviter qu'il soit trop long ou trop court.
+
